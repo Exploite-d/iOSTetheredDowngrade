@@ -152,7 +152,7 @@
 Iphonewiki says that asr <a href="https://www.theiphonewiki.com/wiki/ASR">&quot;works by writing the rootfs image to the actual system drive (ASR RESTORE), then checksums it. (ASR VERIFY)&quot;</a>.
 So now our task is to patch it.</p>
 <hr />
-<p>First thing we're goint ot do is extract ASR from restore ramdisk, check the name of restore ramdisk for your device and correct version on iphonewiki:</p>
+<p>First thing we're goint to do is extract ASR from restore ramdisk, check the name of restore ramdisk for your device and correct version on iphonewiki:</p>
 <ul>
 <li>
 <p>Decrypting ramdisk: <code>./img4 -i pathToRestoreRamdisk PathToSaveDecryptedRamdisk</code></p>
@@ -167,22 +167,27 @@ Patching asr was the first think where I had to think for a little longer, altho
 <img src="./image/2020-04-23/1.png" alt="" /></p>
 </li>
 <li>
-<p>We see 3 lines, the that we are insterested in is the third one. Follow it to where it's comming from.<img src="./image/2020-04-23/2.png" alt="" /></p>
+<p>On the left side we should see adresss of Image passed signature verification reference. Keep this address in mind or write it down somewhere.<img src="./image/2020-04-23/2.png" alt="" /></p>
 </li>
 <li>
-<p>Change the view to see it's addres.<img src="./image/2020-04-23/3.png" alt="" /></p>
+<p>Now find string &quot;Image passed&quot; and reference to it<img src="./image/2020-04-23/3.png" alt="" /></p>
 </li>
 <li>
-<p>We need to calculate the difference between adress of this instruction and adress of function &quot;Image passed&quot; string
+<p>On the left side we should again see address of Image passed signature verification reference. Again keep this address in mind or write it down.
 <img src="./image/2020-04-23/4.png" alt="" /></p>
 </li>
 <li>
-<p>Now all we need to do is modify the original instuction with our modified one and save new binary.<img src="./image/2020-04-23/5.png" alt="" /></p>
+<p>Now we need to calculate difference between Image passed signature address and Image failed signature address.
+<br>
+<img src="./image/2020-04-23/5.png" alt="" /></p>
 </li>
 <li>
-<p>You can confirm that everything is correct by following green line.
+<p>Now we need to make branch in place of Image passed reference with address we just calculated.
 <img src="./image/2020-04-23/6.png" alt="" />
+<li>
+<p>You can confirm you did correctly by following line coming from branch we just made.
 <img src="./image/2020-04-23/7.png" alt="" />
+</li>
 It's time to put binary back, let's resize ramdisk a little bit to make it fit.</p>
 </li>
 <li>
